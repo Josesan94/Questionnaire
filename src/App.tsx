@@ -9,16 +9,16 @@ import AssignedQuestionnaireTable from './components/AssignedQuestionnaire';
 function App() {
   return (
     <Container>
-      <Box sx={{ marginBottom: 2 }}>
+      <Box sx={{ marginBottom: 5 }}>
         <QuestionnaireTable />
       </Box>
-      <Box sx={{ marginBottom: 2 }}>
+      <Box sx={{ marginBottom: 5 }}>
         <PeopleList />
       </Box>
-      <Box sx={{ marginBottom: 2 }}>
+      <Box sx={{ marginBottom: 5 }}>
         <AssignQuestionnaireForm />
       </Box>
-      <Box sx={{ marginBottom: 2 }}>
+      <Box sx={{ marginBottom: 5 }}>
         <AssignedQuestionnaireTable />
       </Box>
     </Container>
