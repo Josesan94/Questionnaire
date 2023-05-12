@@ -1,0 +1,14 @@
+[
+    {
+      "name": "John",
+      "surname": "Doe",
+      "email": "john.doe@example.com",
+      "whatsapp": "+1234567890"
+    },
+    {
+      "name": "Jane",
+      "surname": "Doe",
+      "email": "jane.doe@example.com",
+      "whatsapp": "+0987654321"
+    }
+  ]
