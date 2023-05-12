@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import peopleList from '../mocks/people.json'
 
 interface Person {
   name: string;
@@ -10,7 +11,7 @@ interface Person {
 }
 
 const PeopleList: React.FC = () => {
-  const [people, setPeople] = useState<Person[]>([]);
+  const [people, setPeople] = useState<Person[]>(peopleList);
 
   useEffect(() => {
     const fetchPeople = async () => {
