@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { styled } from "@mui/system";
 import {
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Button,
-  TextField,
+  Box
 } from "@mui/material";
 import peopleList from '../mocks/people.json'
 import questionnairesMock from '../mocks/questionnaire.json'
@@ -22,6 +23,15 @@ interface Person {
   email: string;
   whatsapp: string;
 }
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  background:"aliceblue",
+  marginTop: theme.spacing(2),
+}));
 
 const AssignQuestionnaireForm: React.FC = () => {
   const [questionnaires, setQuestionnaires] = useState<Questionnaire[]>(questionnairesMock);
@@ -83,8 +93,10 @@ const AssignQuestionnaireForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormControl fullWidth>
+
+    <Box component="form" onSubmit={handleSubmit}>
+      <h1>Assign the correspondant questionnaire</h1>
+      <StyledFormControl fullWidth>
         <InputLabel id="questionnaire-select-label">Questionnaire</InputLabel>
         <Select
           labelId="questionnaire-select-label"
@@ -102,8 +114,8 @@ const AssignQuestionnaireForm: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
-      <FormControl fullWidth>
+      </StyledFormControl>
+      <StyledFormControl fullWidth>
         <InputLabel id="person-select-label">Person</InputLabel>
         <Select
           labelId="person-select-label"
@@ -116,11 +128,11 @@ const AssignQuestionnaireForm: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
-      <Button type="submit" variant="contained" color="primary">
+      </StyledFormControl>
+      <StyledButton type="submit" variant="contained" color="primary">
         Assign Questionnaire
-      </Button>
-    </form>
+      </StyledButton>
+    </Box>
   );
 };
 

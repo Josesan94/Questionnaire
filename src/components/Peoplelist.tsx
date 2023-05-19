@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import peopleList from '../mocks/people.json'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { styled } from "@mui/system";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import peopleList from "../mocks/people.json";
 
 interface Person {
   name: string;
@@ -10,16 +18,29 @@ interface Person {
   whatsapp: string;
 }
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
+
+const StyledHeaderCell = styled(StyledTableCell)({
+  fontWeight: "bold",
+  backgroundColor: "#f5f5f5",
+});
+
+const StyledTableContainer = styled(TableContainer)({
+  boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
+});
+
 const PeopleList: React.FC = () => {
   const [people, setPeople] = useState<Person[]>(peopleList);
 
   useEffect(() => {
     const fetchPeople = async () => {
       try {
-        const response = await axios.get('/people');
+        const response = await axios.get("/people");
         setPeople(response.data);
       } catch (error) {
-        console.error('Failed to fetch people', error);
+        console.error("Failed to fetch people", error);
       }
     };
 
@@ -27,28 +48,31 @@ const PeopleList: React.FC = () => {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
+    <>
+    <h1>List of people</h1>
+    <StyledTableContainer>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Surname</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>WhatsApp</TableCell>
+            <StyledHeaderCell>Name</StyledHeaderCell>
+            <StyledHeaderCell>Surname</StyledHeaderCell>
+            <StyledHeaderCell>Email</StyledHeaderCell>
+            <StyledHeaderCell>WhatsApp</StyledHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {people.map((person, index) => (
             <TableRow key={index}>
-              <TableCell>{person.name}</TableCell>
-              <TableCell>{person.surname}</TableCell>
-              <TableCell>{person.email}</TableCell>
-              <TableCell>{person.whatsapp}</TableCell>
+              <StyledTableCell>{person.name}</StyledTableCell>
+              <StyledTableCell>{person.surname}</StyledTableCell>
+              <StyledTableCell>{person.email}</StyledTableCell>
+              <StyledTableCell>{person.whatsapp}</StyledTableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
+    </>
   );
 };
 

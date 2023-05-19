@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { styled } from "@mui/system";
 import {
   Table,
   TableBody,
@@ -31,6 +32,58 @@ interface AssignedQuestionnaire {
   whatsapp: string;
 }
 
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
+
+const StyledHeaderCell = styled(StyledTableCell)({
+  fontWeight: "bold",
+  backgroundColor: "#f5f5f5",
+});
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  marginRight: theme.spacing(1),
+}));
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+}));
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '.MuiDialog-paper': {
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(2),
+  },
+}));
+
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  borderRadius: theme.spacing(2, 2, 0, 0),
+}));
+
+const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[100],
+}));
+
+const StyledDialogContentText = styled(DialogContentText)(({ theme }) => ({
+  margin: theme.spacing(1, 0),
+  '.MuiTypography-root': {
+    color: theme.palette.text.secondary,
+  },
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.dark,
+  color: theme.palette.common.white,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+
+
 const AssignedQuestionnaireTable: React.FC = () => {
   const [assignedQuestionnaires, setAssignedQuestionnaires] = useState<AssignedQuestionnaire[]>(AssignedQuestionnairesMock);
   const [open, setOpen] = useState(false);
@@ -54,16 +107,17 @@ const AssignedQuestionnaireTable: React.FC = () => {
   const handleDelete = async (id: number) => {
       setAssignedQuestionnaires(
         assignedQuestionnaires.filter(
-          (aq) => aq.assigned_questionnaire_id !== 1
+          (aq) => aq.assigned_questionnaire_id !== id
         )
         
       );
       console.log("BORRADO")
+      //procedimiento para el borrado de cuestionarios, si existiese endpoint correspondiente
     // try {
     //   await axios.delete(`/assigned-questionnaires/${id}`);
     //   setAssignedQuestionnaires(
     //     assignedQuestionnaires.filter(
-    //       (aq) => aq.assigned_questionnaire_id !== 1
+    //       (aq) => aq.assigned_questionnaire_id !== id
     //     )
         
     //   );
@@ -90,31 +144,31 @@ const AssignedQuestionnaireTable: React.FC = () => {
     setEditMode(null);
   };
 
-
-  const HandleEditAssignedQuestionnaire = async (
-    assignedQuestionnaireId: number,
-    updatedData: Partial<AssignedQuestionnaire>
-  ) => {
-    try {
-      await axios.put(
-        `/api/assigned-questionnaires/${assignedQuestionnaireId}`,
-        updatedData
-      );
-      setAssignedQuestionnaires((prevState) => {
-        return prevState.map((assignedQuestionnaire) => {
-          if (
-            assignedQuestionnaire.assigned_questionnaire_id ===
-            assignedQuestionnaireId
-          ) {
-            return { ...assignedQuestionnaire, ...updatedData };
-          }
-          return assignedQuestionnaire;
-        });
-      });
-    } catch (error) {
-      console.error("Error editing assigned questionnaire:", error);
-    }
-  };
+ //PROCEDIMIENTO PARA EDITAR CUESTIONARIOS Y GUARDAR INFORMACION EN EP.
+  // const HandleEditAssignedQuestionnaire = async (
+  //   assignedQuestionnaireId: number,
+  //   updatedData: Partial<AssignedQuestionnaire>
+  // ) => {
+  //   try {
+  //     await axios.put(
+  //       `/api/assigned-questionnaires/${assignedQuestionnaireId}`,
+  //       updatedData
+  //     );
+  //     setAssignedQuestionnaires((prevState) => {
+  //       return prevState.map((assignedQuestionnaire) => {
+  //         if (
+  //           assignedQuestionnaire.assigned_questionnaire_id ===
+  //           assignedQuestionnaireId
+  //         ) {
+  //           return { ...assignedQuestionnaire, ...updatedData };
+  //         }
+  //         return assignedQuestionnaire;
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.error("Error editing assigned questionnaire:", error);
+  //   }
+  // };
 
   const handleView = (assignedQuestionnaire: AssignedQuestionnaire) => {
     setCurrentQuestionnaire(assignedQuestionnaire);
@@ -128,91 +182,93 @@ const AssignedQuestionnaireTable: React.FC = () => {
   // TODO: Implement handleEdit and handleView
 
   return (
-    <TableContainer component={Paper}>
+    <>
+    <h1>Assigned questionnaires</h1>
+    <StyledTableContainer>
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Assigned ID</TableCell>
-            <TableCell>Questionnaire ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Surname</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>WhatsApp</TableCell>
-            <TableCell>Actions</TableCell>
+            <StyledHeaderCell>Assigned ID</StyledHeaderCell>
+            <StyledHeaderCell>Questionnaire ID</StyledHeaderCell>
+            <StyledHeaderCell>Name</StyledHeaderCell>
+            <StyledHeaderCell>Surname</StyledHeaderCell>
+            <StyledHeaderCell>Email</StyledHeaderCell>
+            <StyledHeaderCell>WhatsApp</StyledHeaderCell>
+            <StyledHeaderCell>Actions</StyledHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {assignedQuestionnaires.map((assignedQuestionnaire) => (
             <TableRow key={assignedQuestionnaire.assigned_questionnaire_id}>
-              <TableCell>
+              <StyledTableCell>
                 {assignedQuestionnaire.assigned_questionnaire_id}
-              </TableCell>
-              <TableCell>{assignedQuestionnaire.questionnaire_id}</TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>{assignedQuestionnaire.questionnaire_id}</StyledTableCell>
+              <StyledTableCell>
                 {editMode === assignedQuestionnaire.assigned_questionnaire_id ? (
                   <TextField name="name" value={tempData.name || ''} onChange={(e) => handleChange('name', e.target.value)} />
                 ) : (
                   assignedQuestionnaire.name
                 )}
-              </TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>
                 {editMode === assignedQuestionnaire.assigned_questionnaire_id ? (
                   <TextField name="surname" value={tempData.surname || ''} onChange={(e) => handleChange('surname', e.target.value)} />
                 ) : (
                   assignedQuestionnaire.surname
                 )}
-              </TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>
                 {editMode === assignedQuestionnaire.assigned_questionnaire_id ? (
                   <TextField name="email" value={tempData.email || ''} onChange={(e) => handleChange('email', e.target.value)} />
                 ) : (
                   assignedQuestionnaire.email
                 )}
-              </TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>
                 {editMode === assignedQuestionnaire.assigned_questionnaire_id ? (
                   <TextField name="whatsapp" value={tempData.whatsapp || ''} onChange={(e) => handleChange('whatsapp', e.target.value)} />
                 ) : (
                   assignedQuestionnaire.whatsapp
                 )}
-              </TableCell>
-              <TableCell>
-                <IconButton onClick={() => handleView(assignedQuestionnaire)}>
+              </StyledTableCell>
+              <StyledTableCell>
+                <StyledIconButton onClick={() => handleView(assignedQuestionnaire)}>
                   <VisibilityIcon />
-                </IconButton>
+                </StyledIconButton>
 
-                <Dialog open={open} onClose={handleClose}>
-                  <DialogTitle>Questionnaire Details</DialogTitle>
-                  <DialogContent>
+                <StyledDialog open={open} onClose={handleClose}>
+                  <StyledDialogTitle>Questionnaire Details</StyledDialogTitle>
+                  <StyledDialogContent>
                     {currentQuestionnaire && (
                       <div>
-                        <DialogContentText>
+                        <StyledDialogContentText>
                           <strong>Assigned ID:</strong> {currentQuestionnaire.assigned_questionnaire_id}
-                        </DialogContentText>
-                        <DialogContentText>
+                        </StyledDialogContentText>
+                        <StyledDialogContentText>
                           <strong>Questionnaire ID:</strong> {currentQuestionnaire.questionnaire_id}
-                        </DialogContentText>
-                        <DialogContentText>
+                        </StyledDialogContentText>
+                        <StyledDialogContentText>
                           <strong>Name:</strong> {currentQuestionnaire.name}
-                        </DialogContentText>
-                        <DialogContentText>
+                        </StyledDialogContentText>
+                        <StyledDialogContentText>
                           <strong>Surname:</strong> {currentQuestionnaire.surname}
-                        </DialogContentText>
-                        <DialogContentText>
+                        </StyledDialogContentText>
+                        <StyledDialogContentText>
                           <strong>Email:</strong> {currentQuestionnaire.email}
-                        </DialogContentText>
-                        <DialogContentText>
+                        </StyledDialogContentText>
+                        <StyledDialogContentText>
                           <strong>WhatsApp:</strong> {currentQuestionnaire.whatsapp}
-                        </DialogContentText>
+                        </StyledDialogContentText>
                       </div>
                     )}
-                  </DialogContent>
+                  </StyledDialogContent>
                   <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <StyledButton onClick={handleClose} color="primary">
                       Close
-                    </Button>
+                    </StyledButton>
                   </DialogActions>
-                </Dialog>
+                </StyledDialog>
                 {editMode === assignedQuestionnaire.assigned_questionnaire_id ? (
                   <IconButton onClick={() => handleSave(assignedQuestionnaire)}>
                     <SaveIcon />
@@ -225,12 +281,13 @@ const AssignedQuestionnaireTable: React.FC = () => {
                 <IconButton onClick={() => handleDelete(assignedQuestionnaire.assigned_questionnaire_id)}>
                   <DeleteIcon />
                 </IconButton>
-              </TableCell>
+              </StyledTableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
+    </>
   );
 };
 
